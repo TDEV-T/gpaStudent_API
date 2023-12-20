@@ -6,11 +6,10 @@ import jakarta.persistence.*
 @Table(name="students")
 data class Student(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id:Long = 0,
+    val studentId:String,
 
-    val studentID:String,
+
     val fname:String,
     val lname:String,
-    val nationalID:String,
+    val nationalId:String,
 )
