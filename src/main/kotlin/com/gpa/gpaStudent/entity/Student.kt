@@ -9,7 +9,7 @@ data class Student(
     val studentId:String,
 
 
-    val fname:String,
-    val lname:String,
-    val nationalId:String,
+    var fname:String,
+    var lname:String,
+    var nationalId:String,
 )
