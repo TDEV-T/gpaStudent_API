@@ -1,10 +1,9 @@
 package com.gpa.gpaStudent.repo
 
-import com.gpa.gpaStudent.entity.Student
+import com.gpa.gpaStudent.entity.Grade
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
-
 @Repository
-interface StudentRepository  : JpaRepository<Student,String> {
+interface GradeRepository : JpaRepository<Grade,Long> {
 }

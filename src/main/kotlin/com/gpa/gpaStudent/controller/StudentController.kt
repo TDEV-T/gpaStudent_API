@@ -1,5 +1,3 @@
-package com.gpa.gpaStudent.controller
-
 import com.gpa.gpaStudent.entity.Student
 import com.gpa.gpaStudent.repo.StudentRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,67 +11,69 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
-
+import java.util.Optional
 
 @RestController
 @RequestMapping("/api")
-class StudentController  {
+class StudentController {
 
     @Autowired
-    lateinit var studentRepository:StudentRepository
+    lateinit var studentRepository: StudentRepository
 
     @GetMapping("/students")
-    fun index(): MutableList<Student> {
-        return studentRepository.findAll()
+    fun index(): ResponseEntity<MutableList<Student>> {
+        val students: MutableList<Student> = studentRepository.findAll()
+        return ResponseEntity(students, HttpStatus.OK)
     }
 
     @GetMapping("/students/{id}")
-    fun getStudentById(@PathVariable id : String): Optional<Student> {
-        return studentRepository.findById(id)
+    fun getStudentById(@PathVariable id: String): ResponseEntity<Student> {
+        val student: Optional<Student> = studentRepository.findById(id)
+        return if (student.isPresent) {
+            ResponseEntity(student.get(), HttpStatus.OK)
+        } else {
+            ResponseEntity(HttpStatus.NOT_FOUND)
+        }
     }
 
     @PostMapping("/students")
-    fun create(@RequestBody data:Student) : String {
-        return try{
-            studentRepository.save(data);
-            "Create Success !"
-        }catch (e : Exception){
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error : ${e.message}").toString()
+    fun create(@RequestBody data: Student): ResponseEntity<String> {
+        return try {
+            studentRepository.save(data)
+            ResponseEntity.ok("Create Success!")
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: ${e.message}")
         }
     }
 
     @PutMapping("/students/update/{id}")
-    fun update(@PathVariable id : String,@RequestBody stuReq : Student ) : String{
-        return try{
-         val  stu:Student  =  studentRepository.findById(id).orElse(null)
+    fun update(@PathVariable id: String, @RequestBody stuReq: Student): ResponseEntity<String> {
+        return try {
+            val stu: Student = studentRepository.findById(id).orElse(null)
 
-            if(stu != null) {
+            return if (stu != null) {
                 stu.fname = stuReq.fname
                 stu.lname = stuReq.lname
                 stu.nationalId = stuReq.nationalId
 
                 studentRepository.save(stu)
 
-                "Update Success"
-            }else{
-                "Student ID : $id Not found"
+                ResponseEntity.ok("Update Success")
+            } else {
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student ID: $id Not found")
             }
-        }catch(e : Exception){
-            "Error: ${e.message}"
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: ${e.message}")
         }
     }
 
     @DeleteMapping("/students/delete/{id}")
-    fun delete(@PathVariable id : String) : String{
-        return try{
+    fun delete(@PathVariable id: String): ResponseEntity<String> {
+        return try {
             studentRepository.deleteById(id)
-            "Delete Success !"
-        }catch(e : Exception){
-            "Error : ${e.message}"
+            ResponseEntity.ok("Delete Success!")
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: ${e.message}")
         }
     }
-
-
-
 }
