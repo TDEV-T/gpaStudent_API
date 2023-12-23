@@ -10,20 +10,20 @@ import jakarta.persistence.Table
 @Entity
 @Table(name="grades")
 data class Grade(
-    @Id
+        @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id : Long = 0,
 
-    @ManyToOne
-    val student : Student,
+        @ManyToOne
+        var student : Student,
 
-    @ManyToOne
-    val subject : Subject,
+        @ManyToOne
+        var subject : Subject,
 
-    @ManyToOne
-    val term:Term,
+        @ManyToOne
+        var term:Term,
 
-    val score : Double,
+        var score : Double,
 
-    val creditHourse : Int
+        var creditHourse : Int
 )
