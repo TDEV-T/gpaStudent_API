@@ -17,6 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.Optional
 
+
+data class LoginRequest(
+        val studentId: String,
+        val nationalId: String
+)
+
+
 @RestController
 @RequestMapping("/api/students")
 class StudentController {
@@ -92,13 +99,13 @@ class StudentController {
     }
 
     @PostMapping("/login")
-    fun getStudentByStudentIdandNationalId(@RequestParam studentId : String, @RequestParam nationalId : String ) : ResponseEntity<Student> {
+    fun getStudentByStudentIdandNationalId(@RequestBody stuReq : LoginRequest ) : ResponseEntity<Student> {
         return try{
-            val student : Student ? = studentRepository.findByStudentIdAndNationalId(studentId,nationalId);
+            val student : Student ? = studentRepository.findByStudentIdAndNationalId(stuReq.studentId,stuReq.nationalId);
             return if(student != null){
                 ResponseEntity(student,HttpStatus.OK)
             }else{
-                ResponseEntity(HttpStatus.NOT_FOUND)
+                ResponseEntity(null,HttpStatus.OK)
             }
         }catch(e : Exception){
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
