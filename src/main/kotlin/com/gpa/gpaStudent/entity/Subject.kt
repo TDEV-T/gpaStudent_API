@@ -11,4 +11,6 @@ data class Subject(
         val subjectCode : String,
         var subjectName : String,
 
-)
+){
+        constructor():this("","");
+}

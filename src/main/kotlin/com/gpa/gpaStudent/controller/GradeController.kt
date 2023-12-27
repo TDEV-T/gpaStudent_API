@@ -1,6 +1,6 @@
 package com.gpa.gpaStudent.controller
 
-import com.gpa.gpaStudent.entity.Grade
+import com.gpa.gpaStudent.entity.*
 import com.gpa.gpaStudent.repo.GradeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+
+
+
+
+
 
 
 @RestController
@@ -74,6 +79,12 @@ class GradeController {
         }catch(e : Exception){
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error : ${e.message}")
         }
+    }
+
+    @GetMapping("/grades/student/{studentId}")
+    fun getGradesByStudentId(@PathVariable studentId: String): ResponseEntity<List<GradeAndTerm>> {
+        val grades = gradeRepository.findGradesAndTermsByStudentId(studentId)
+        return ResponseEntity.ok(grades)
     }
 
 

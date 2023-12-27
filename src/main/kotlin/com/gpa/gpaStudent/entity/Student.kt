@@ -12,4 +12,6 @@ data class Student(
     var fname:String,
     var lname:String,
     var nationalId:String,
-)
+){
+    constructor():this("","","","");
+}
