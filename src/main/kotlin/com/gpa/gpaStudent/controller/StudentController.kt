@@ -23,6 +23,11 @@ data class LoginRequest(
         val nationalId: String
 )
 
+data class ResponseStudent (
+        var studentId: String?,
+        var message : String
+)
+
 
 @RestController
 @RequestMapping("/api/students")
@@ -99,13 +104,13 @@ class StudentController {
     }
 
     @PostMapping("/login")
-    fun getStudentByStudentIdandNationalId(@RequestBody stuReq : LoginRequest ) : ResponseEntity<Student> {
+    fun getStudentByStudentIdandNationalId(@RequestBody stuReq : LoginRequest ) : ResponseEntity<ResponseStudent> {
         return try{
             val student : Student ? = studentRepository.findByStudentIdAndNationalId(stuReq.studentId,stuReq.nationalId);
             return if(student != null){
-                ResponseEntity(student,HttpStatus.OK)
+                ResponseEntity(ResponseStudent(student.studentId,"Login Success"),HttpStatus.OK)
             }else{
-                ResponseEntity(null,HttpStatus.OK)
+                ResponseEntity(ResponseStudent(null,"Can't find StudentID"),HttpStatus.OK)
             }
         }catch(e : Exception){
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
