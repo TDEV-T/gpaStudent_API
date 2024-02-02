@@ -77,17 +77,15 @@ class StudentController {
         return try {
             val stu: Student = studentRepository.findById(id).orElse(null)
 
-            return if (stu != null) {
+
                 stu.fname = stuReq.fname
                 stu.lname = stuReq.lname
                 stu.nationalId = stuReq.nationalId
 
                 studentRepository.save(stu)
 
-                ResponseEntity.ok("Update Success")
-            } else {
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student ID: $id Not found")
-            }
+            return  ResponseEntity.ok("Update Success")
+
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: ${e.message}")
         }
